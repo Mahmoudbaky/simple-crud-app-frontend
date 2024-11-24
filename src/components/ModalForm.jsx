@@ -76,6 +76,7 @@ const ModalForm = ({ isOpen, onClose, onSubmit, mode }) => {
 
               <select
                 className="select select-bordered w-full max-w-xs"
+                value={status ? "Active" : "Inactive"}
                 onChange={(e) => setStatus(e.target.value)}
               >
                 <option>Inactive</option>

@@ -1,6 +1,10 @@
 import React from "react";
 
-const NavBar = ({ onOpen }) => {
+const NavBar = ({ onOpen, onSearch }) => {
+  const searchHandler = (e) => {
+    onSearch(e.target.value);
+  };
+
   return (
     <>
       <div className="navbar bg-base-100 p-4">
@@ -13,6 +17,7 @@ const NavBar = ({ onOpen }) => {
               type="text"
               placeholder="Search for user"
               className="input input-bordered w-44 md:w-auto text-center"
+              onChange={searchHandler}
             />
           </div>
         </div>
