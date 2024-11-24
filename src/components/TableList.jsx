@@ -8,6 +8,7 @@ const TableList = ({ onOpen }) => {
       email: "john.doe@example.com",
       job: "IT",
       age: 28,
+      rate: 101,
       country: "United States",
       status: true,
     },
@@ -17,6 +18,7 @@ const TableList = ({ onOpen }) => {
       email: "jane.smith@example.com",
       job: "IT",
       age: 34,
+      rate: 102,
       country: "United Kingdom",
       status: false,
     },
@@ -26,6 +28,7 @@ const TableList = ({ onOpen }) => {
       email: "ali.alsalem@example.com",
       job: "IT",
       age: 30,
+      rate: 103,
       country: "Saudi Arabia",
       status: true,
     },
@@ -42,20 +45,20 @@ const TableList = ({ onOpen }) => {
               <th>Name</th>
               <th>Job</th>
               <th>Country</th>
-              <th>Email</th>
+              <th>Rate</th>
               <th>Age</th>
               <th>Status</th>
             </tr>
           </thead>
           <tbody className="hover">
             {users.map((user) => (
-              <tr>
+              <tr key={user.id} className="hover">
                 <th>{user.id}</th>
                 <td>{user.name}</td>
-                <td>{user.job}</td>
-                <td>{user.country}</td>
                 <td>{user.email}</td>
+                <td>{user.job}</td>
                 <td>{user.age}</td>
+                <td>{user.rate}</td>
                 <td>
                   <button
                     className={`btn rounded-full w-20 ${
