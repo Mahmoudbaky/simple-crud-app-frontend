@@ -1,62 +1,33 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const TableList = ({ onOpen, searchTerm }) => {
-  const [users, setUsers] = useState([]);
-  const [err, setErr] = useState(null);
+const TableList = ({ onOpen, searchTerm, usersTable, setUsersTable }) => {
+  // useEffect(() => {
+  //   fetchUsers();
+  // }, []);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get("http://localhost:3000/api/users");
-        setUsers(response.data);
-      } catch (error) {
-        setErr(error.message);
-      }
-    };
-
-    fetchUsers();
-  }, []);
-
-  const filteredUsers = users.filter(
+  const filteredUsers = usersTable.filter(
     (user) =>
       user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.job.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // const users = [
-  //   {
-  //     id: 1,
-  //     name: "John Doe",
-  //     email: "john.doe@example.com",
-  //     job: "IT",
-  //     age: 28,
-  //     rate: 101,
-  //     country: "United States",
-  //     status: true,
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Jane Smith",
-  //     email: "jane.smith@example.com",
-  //     job: "IT",
-  //     age: 34,
-  //     rate: 102,
-  //     country: "United Kingdom",
-  //     status: false,
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Ali Al-Salem",
-  //     email: "ali.alsalem@example.com",
-  //     job: "IT",
-  //     age: 30,
-  //     rate: 103,
-  //     country: "Saudi Arabia",
-  //     status: true,
-  //   },
-  // ];
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete this user?`
+    );
+    if (confirmDelete) {
+      try {
+        await axios.delete(`http://localhost:3000/api/users/${id}`);
+        setUsersTable((prevUsers) =>
+          prevUsers.filter((user) => user.id !== id)
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   return (
     <>
@@ -95,13 +66,14 @@ const TableList = ({ onOpen, searchTerm }) => {
                     className={`btn rounded-full w-20 
                        btn-primary
                     }`}
-                    onClick={onOpen}
+                    onClick={() => onOpen("edit", user)}
                   >
                     Update
                   </button>
                 </td>
                 <td>
                   <button
+                    onClick={() => handleDelete(user.id)}
                     className={`btn rounded-full w-20 
                        btn-error
                     }`}

@@ -1,11 +1,55 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-const ModalForm = ({ isOpen, onClose, onSubmit, mode }) => {
-  const [rate, setRate] = useState("");
+const ModalForm = ({ isOpen, onClose, OnSubmit, mode, userData }) => {
   const [name, setName] = useState(""); // State for Name
   const [email, setEmail] = useState(""); // State for Email
   const [job, setJob] = useState(""); // State for Job
-  const [status, setStatus] = useState(""); // State for Status
+  const [rate, setRate] = useState("");
+  const [status, setStatus] = useState(true); // State for Status
+
+  const handleStatusChange = (e) => {
+    setStatus(e.target.value === "Active");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const userData = {
+        name,
+        email,
+        job,
+        rate: Number(rate),
+        isactive: status,
+      };
+      OnSubmit(userData);
+      setName("");
+      setEmail("");
+      setJob("");
+      setRate("");
+      setStatus(false);
+    } catch (error) {
+      console.error(error);
+    }
+
+    onClose();
+  };
+
+  useEffect(() => {
+    if (mode === "edit" && userData) {
+      setName(userData.name);
+      setEmail(userData.email);
+      setJob(userData.job);
+      setRate(userData.rate);
+      setStatus(userData.status);
+    } else {
+      setName("");
+      setEmail("");
+      setJob("");
+      setRate("");
+      setStatus(false);
+    }
+  }, [mode, userData]);
 
   return (
     <>
@@ -28,12 +72,8 @@ const ModalForm = ({ isOpen, onClose, onSubmit, mode }) => {
           <h3 className="font-bold text-lg py-4">
             {mode === "edit" ? "Edit Client" : "Client Details"}
           </h3>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              onSubmit();
-            }}
-          >
+          {/* ************ the form ************ */}
+          <form onSubmit={handleSubmit}>
             <label className="input input-bordered flex items-center my-4 gap-2">
               Name
               <input
@@ -74,10 +114,11 @@ const ModalForm = ({ isOpen, onClose, onSubmit, mode }) => {
                 />
               </label>
 
+              {/* need to undersatnd this */}
               <select
                 className="select select-bordered w-full max-w-xs"
                 value={status ? "Active" : "Inactive"}
-                onChange={(e) => setStatus(e.target.value)}
+                onChange={handleStatusChange}
               >
                 <option>Inactive</option>
                 <option>Active</option>
@@ -95,3 +136,27 @@ const ModalForm = ({ isOpen, onClose, onSubmit, mode }) => {
 };
 
 export default ModalForm;
+
+// (e) => {
+//   e.preventDefault();
+//   handleSubmit();
+// }
+
+// const handleUpdate = async (e, userID) => {
+//   e.preventDefault();
+//   try {
+//     const response = await axios.get(
+//       `http://localhost:3000/api/users/${userID}`
+//     );
+//     const userInfo = response.data;
+//     setName(userInfo.name);
+//     setEmail(userInfo.email);
+//     setJob(userInfo.job);
+//     setRate(userInfo.rate);
+//     setStatus(userInfo.status);
+//     setUserId(userInfo.id)
+//   } catch (error) {
+//     console.error(error);
+//   }
+//   onClose();
+// };
