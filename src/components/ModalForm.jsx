@@ -41,7 +41,7 @@ const ModalForm = ({ isOpen, onClose, OnSubmit, mode, userData }) => {
       setEmail(userData.email);
       setJob(userData.job);
       setRate(userData.rate);
-      setStatus(userData.status);
+      setStatus(userData.isactive);
     } else {
       setName("");
       setEmail("");

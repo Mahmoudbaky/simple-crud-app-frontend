@@ -25,6 +25,7 @@ const App = () => {
 
   const handleOpen = (mode, user) => {
     setUserData(user);
+    console.log(user);
     setModalMode(mode);
     setIsOpen(true);
   };
